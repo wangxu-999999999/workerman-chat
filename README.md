@@ -4,6 +4,8 @@ workerman-chat
 
 GatewayWorker框架文档：http://www.workerman.net/gatewaydoc/
 
+原项目地址：https://github.com/walkor/workerman-chat
+
  特性
 ======
  * 使用websocket协议
@@ -18,7 +20,7 @@ GatewayWorker框架文档：http://www.workerman.net/gatewaydoc/
   
 下载安装
 =====
-1、git clone https://github.com/walkor/workerman-chat
+1、git clone https://github.com/wangxu-999999999/workerman-chat.git
 
 2、composer install
 
@@ -43,3 +45,31 @@ windows系统下无法使用 stop reload status 等命令
 浏览器访问 http://服务器ip或域:55151,例如http://127.0.0.1:55151
 
  [更多请访问www.workerman.net](http://www.workerman.net/workerman-chat)
+
+改动
+=======
+增加 config.php 配置文件
+
+docker分离部署
+=======
+172.172.0.10、172.172.0.11用于web、gateway
+
+172.172.0.12用于register
+
+172.172.0.13、172.172.0.14用于worker
+
+1、register
+
+$ docker run -p 1236:1236 -v ~/chat/chat/:/root/chat --network=php_net --ip 172.172.0.12 -itd --name register php
+
+2、worker
+
+$ docker run -v ~/chat/chat/:/root/chat --network=php_net --ip 172.172.0.13 -itd --name worker_1 php
+
+$ docker run -v ~/chat/chat/:/root/chat --network=php_net --ip 172.172.0.14 -itd --name worker_2 php
+
+3、web、gateway
+
+$ docker run -p 7272:7272 -p 55151:55151 -v ~/chat/chat/:/root/chat --network=php_net --ip 172.172.0.10 -itd --name gateway_1 php
+
+$ docker run -p 7273:7272 -p 55152:55151 -v ~/chat/chat/:/root/chat --network=php_net --ip 172.172.0.11 -itd --name gateway_2 php
