@@ -17,48 +17,64 @@ use Workerman\Protocols\Http\Response;
 use Workerman\Connection\TcpConnection;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
+require_once 'config.php';
 
-// WebServer
-$web = new Worker("http://0.0.0.0:55151");
-// WebServer进程数量
-$web->count = 2;
+/**
+ * @var array $webHosts
+ */
 
-define('WEBROOT', __DIR__ . DIRECTORY_SEPARATOR .  'Web');
+$ip = gethostbyname(gethostname());
 
-$web->onMessage = function (TcpConnection $connection, Request $request) {
-    $_GET = $request->get();
-    $path = $request->path();
-    if ($path === '/') {
-        $connection->send(exec_php_file(WEBROOT.'/index.php'));
-        return;
-    }
-    $file = realpath(WEBROOT. $path);
-    if (false === $file) {
-        $connection->send(new Response(404, array(), '<h3>404 Not Found</h3>'));
-        return;
-    }
-    // Security check! Very important!!!
-    if (strpos($file, WEBROOT) !== 0) {
-        $connection->send(new Response(400));
-        return;
-    }
-    if (\pathinfo($file, PATHINFO_EXTENSION) === 'php') {
-        $connection->send(exec_php_file($file));
-        return;
-    }
+if (array_key_exists($ip, $webHosts)) {
 
-    $if_modified_since = $request->header('if-modified-since');
-    if (!empty($if_modified_since)) {
-        // Check 304.
-        $info = \stat($file);
-        $modified_time = $info ? \date('D, d M Y H:i:s', $info['mtime']) . ' ' . \date_default_timezone_get() : '';
-        if ($modified_time === $if_modified_since) {
-            $connection->send(new Response(304));
+    // WebServer
+    $web = new Worker("http://0.0.0.0:{$webHosts[$ip]}");
+    // WebServer进程数量
+    $web->count = 2;
+
+    define('WEBROOT', __DIR__ . DIRECTORY_SEPARATOR .  'Web');
+
+    $web->onMessage = function (TcpConnection $connection, Request $request) {
+        $_GET = $request->get();
+        $path = $request->path();
+        if ($path === '/') {
+            $connection->send(exec_php_file(WEBROOT.'/index.php'));
             return;
         }
+        $file = realpath(WEBROOT. $path);
+        if (false === $file) {
+            $connection->send(new Response(404, array(), '<h3>404 Not Found</h3>'));
+            return;
+        }
+        // Security check! Very important!!!
+        if (strpos($file, WEBROOT) !== 0) {
+            $connection->send(new Response(400));
+            return;
+        }
+        if (\pathinfo($file, PATHINFO_EXTENSION) === 'php') {
+            $connection->send(exec_php_file($file));
+            return;
+        }
+
+        $if_modified_since = $request->header('if-modified-since');
+        if (!empty($if_modified_since)) {
+            // Check 304.
+            $info = \stat($file);
+            $modified_time = $info ? \date('D, d M Y H:i:s', $info['mtime']) . ' ' . \date_default_timezone_get() : '';
+            if ($modified_time === $if_modified_since) {
+                $connection->send(new Response(304));
+                return;
+            }
+        }
+        $connection->send((new Response())->withFile($file));
+    };
+
+    // 如果不是在根目录启动，则运行runAll方法
+    if(!defined('GLOBAL_START'))
+    {
+        Worker::runAll();
     }
-    $connection->send((new Response())->withFile($file));
-};
+}
 
 function exec_php_file($file) {
     \ob_start();
@@ -70,10 +86,3 @@ function exec_php_file($file) {
     }
     return \ob_get_clean();
 }
-
-// 如果不是在根目录启动，则运行runAll方法
-if(!defined('GLOBAL_START'))
-{
-    Worker::runAll();
-}
-

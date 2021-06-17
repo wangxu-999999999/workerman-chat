@@ -16,19 +16,28 @@ use \GatewayWorker\BusinessWorker;
 use \Workerman\Autoloader;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
+require_once 'config.php';
 
-// bussinessWorker 进程
-$worker = new BusinessWorker();
-// worker名称
-$worker->name = 'ChatBusinessWorker';
-// bussinessWorker进程数量
-$worker->count = 4;
-// 服务注册地址
-$worker->registerAddress = '127.0.0.1:1236';
+/**
+ * @var array $workerHosts
+ * @var string $registerHost
+ */
 
-// 如果不是在根目录启动，则运行runAll方法
-if(!defined('GLOBAL_START'))
-{
-    Worker::runAll();
+$ip = gethostbyname(gethostname());
+
+if (in_array($ip, $workerHosts)) {
+    // bussinessWorker 进程
+    $worker = new BusinessWorker();
+    // worker名称
+    $worker->name = 'ChatBusinessWorker';
+    // bussinessWorker进程数量
+    $worker->count = 4;
+    // 服务注册地址
+    $worker->registerAddress = $registerHost;
+
+    // 如果不是在根目录启动，则运行runAll方法
+    if(!defined('GLOBAL_START'))
+    {
+        Worker::runAll();
+    }
 }
-
