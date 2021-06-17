@@ -52,6 +52,8 @@ windows系统下无法使用 stop reload status 等命令
 
 docker分离部署
 =======
+例如：
+
 172.172.0.10、172.172.0.11用于web、gateway
 
 172.172.0.12用于register
