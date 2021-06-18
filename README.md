@@ -74,4 +74,4 @@ $ docker run -v ~/chat/chat/:/root/chat --network=php_net --ip 172.172.0.14 -itd
 
 $ docker run -p 7272:7272 -p 55151:55151 -v ~/chat/chat/:/root/chat --network=php_net --ip 172.172.0.10 -itd --name gateway_1 php
 
-$ docker run -p 7273:7272 -p 55152:55151 -v ~/chat/chat/:/root/chat --network=php_net --ip 172.172.0.11 -itd --name gateway_2 php
+$ docker run -p 7273:7273 -p 55152:55152 -v ~/chat/chat/:/root/chat --network=php_net --ip 172.172.0.11 -itd --name gateway_2 php
