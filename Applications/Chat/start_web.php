@@ -21,6 +21,7 @@ require_once 'config.php';
 
 /**
  * @var array $webHosts
+ * @var array $gatewayHosts
  */
 
 $ip = gethostbyname(gethostname());
@@ -38,7 +39,12 @@ if (array_key_exists($ip, $webHosts)) {
         $_GET = $request->get();
         $path = $request->path();
         if ($path === '/') {
-            $connection->send(exec_php_file(WEBROOT.'/index.php'));
+            $html = exec_php_file(WEBROOT.'/index.php');
+            global $gatewayHosts;
+            global $ip;
+            $gatewayPort = $gatewayHosts[$ip];
+            $html = str_replace('$gatewayPort', $gatewayPort, $html);
+            $connection->send($html);
             return;
         }
         $file = realpath(WEBROOT. $path);

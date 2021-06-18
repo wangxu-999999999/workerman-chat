@@ -29,7 +29,7 @@
     // 连接服务端
     function connect() {
        // 创建websocket
-       ws = new WebSocket("ws://"+document.domain+":7272");
+       ws = new WebSocket("ws://"+document.domain+":$gatewayPort");
        // 当socket连接打开时，输入用户名
        ws.onopen = onopen;
        // 当有消息时根据消息类型显示不同信息
