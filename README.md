@@ -78,16 +78,16 @@ $gatewayHosts = [
 
 1、register
 
-$ docker run -p 1236:1236 -v ~/chat/chat/:/root/chat --network=php_net --ip 172.172.0.12 -itd --name register php
+$ docker run -p 1236:1236 -v ~/chat/:/root/chat --network=php_net --ip 172.172.0.12 -itd --name register php
 
 2、worker
 
-$ docker run -v ~/chat/chat/:/root/chat --network=php_net --ip 172.172.0.13 -itd --name worker_1 php
+$ docker run -v ~/chat/:/root/chat --network=php_net --ip 172.172.0.13 -itd --name worker_1 php
 
-$ docker run -v ~/chat/chat/:/root/chat --network=php_net --ip 172.172.0.14 -itd --name worker_2 php
+$ docker run -v ~/chat/:/root/chat --network=php_net --ip 172.172.0.14 -itd --name worker_2 php
 
 3、web、gateway
 
-$ docker run -p 7272:7272 -p 55151:55151 -v ~/chat/chat/:/root/chat --network=php_net --ip 172.172.0.10 -itd --name gateway_1 php
+$ docker run -p 7272:7272 -p 55151:55151 -v ~/chat/:/root/chat --network=php_net --ip 172.172.0.10 -itd --name gateway_1 php
 
-$ docker run -p 7273:7273 -p 55152:55152 -v ~/chat/chat/:/root/chat --network=php_net --ip 172.172.0.11 -itd --name gateway_2 php
+$ docker run -p 7273:7273 -p 55152:55152 -v ~/chat/:/root/chat --network=php_net --ip 172.172.0.11 -itd --name gateway_2 php

@@ -20,6 +20,7 @@ require_once 'config.php';
 
 /**
  * @var array $gatewayHosts
+ * @var array $gatewayCount
  * @var string $registerHost
  */
 
@@ -31,7 +32,7 @@ if (array_key_exists($ip, $gatewayHosts)) {
     // 设置名称，方便status时查看
     $gateway->name = 'ChatGateway';
     // 设置进程数，gateway进程数建议与cpu核数相同
-    $gateway->count = 4;
+    $gateway->count = isset($gatewayCount[$ip]) ? $gatewayCount[$ip] : 1;
     // 分布式部署时请设置成内网ip（非127.0.0.1）
     $gateway->lanIp = $ip;
     // 内部通讯起始端口。假如$gateway->count=4，起始端口为2300

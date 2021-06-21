@@ -21,6 +21,7 @@ require_once 'config.php';
 
 /**
  * @var array $webHosts
+ * @var array $webCount
  * @var array $gatewayHosts
  */
 
@@ -31,17 +32,15 @@ if (array_key_exists($ip, $webHosts)) {
     // WebServer
     $web = new Worker("http://0.0.0.0:{$webHosts[$ip]}");
     // WebServer进程数量
-    $web->count = 2;
+    $web->count = isset($webCount[$ip]) ? $webCount[$ip] : 1;
 
     define('WEBROOT', __DIR__ . DIRECTORY_SEPARATOR .  'Web');
 
-    $web->onMessage = function (TcpConnection $connection, Request $request) {
+    $web->onMessage = function (TcpConnection $connection, Request $request) use ($gatewayHosts, $ip) {
         $_GET = $request->get();
         $path = $request->path();
         if ($path === '/') {
             $html = exec_php_file(WEBROOT.'/index.php');
-            global $gatewayHosts;
-            global $ip;
             $gatewayPort = $gatewayHosts[$ip];
             $html = str_replace('$gatewayPort', $gatewayPort, $html);
             $connection->send($html);

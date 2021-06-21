@@ -20,6 +20,7 @@ require_once 'config.php';
 
 /**
  * @var array $workerHosts
+ * @var array $workerCount
  * @var string $registerHost
  */
 
@@ -31,7 +32,7 @@ if (in_array($ip, $workerHosts)) {
     // worker名称
     $worker->name = 'ChatBusinessWorker';
     // bussinessWorker进程数量
-    $worker->count = 4;
+    $worker->count = isset($workerCount[$ip]) ? $workerCount[$ip] : 1;
     // 服务注册地址
     $worker->registerAddress = $registerHost;
 
