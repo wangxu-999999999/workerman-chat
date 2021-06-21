@@ -91,3 +91,9 @@ $ docker run -v ~/chat/:/root/chat --network=php_net --ip 172.172.0.14 -itd --na
 $ docker run -p 7272:7272 -p 55151:55151 -v ~/chat/:/root/chat --network=php_net --ip 172.172.0.10 -itd --name gateway_1 php
 
 $ docker run -p 7273:7273 -p 55152:55152 -v ~/chat/:/root/chat --network=php_net --ip 172.172.0.11 -itd --name gateway_2 php
+
+4、各容器分别执行php start.php start
+
+5、分别访问宿主机的55151、55152端口，55151的客户端会连接7272端口，55152的客户端会连接7273端口
+
+6、运行过程中，根据需要自由增减worker和web、gateway容器的数量，注意：web、gateway容器关闭时，部分客户端会下线
