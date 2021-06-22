@@ -20,19 +20,21 @@ require_once 'config.php';
 
 /**
  * @var array $workerHosts
- * @var array $workerCount
  * @var string $registerHost
  */
 
 $ip = gethostbyname(gethostname());
 
-if (in_array($ip, $workerHosts)) {
+if (array_key_exists($ip, $workerHosts)) {
+
+    $count = isset($workerHosts[$ip]['count']) ? $workerHosts[$ip]['count'] : 1;
+
     // bussinessWorker 进程
     $worker = new BusinessWorker();
     // worker名称
     $worker->name = 'ChatBusinessWorker';
     // bussinessWorker进程数量
-    $worker->count = isset($workerCount[$ip]) ? $workerCount[$ip] : 1;
+    $worker->count = $count;
     // 服务注册地址
     $worker->registerAddress = $registerHost;
 

@@ -21,7 +21,6 @@ require_once 'config.php';
 
 /**
  * @var array $webHosts
- * @var array $webCount
  * @var array $gatewayHosts
  */
 
@@ -29,10 +28,13 @@ $ip = gethostbyname(gethostname());
 
 if (array_key_exists($ip, $webHosts)) {
 
+    $port = $webHosts[$ip]['port'];
+    $count = isset($webHosts[$ip]['count']) ? $webHosts[$ip]['count'] : 1;
+
     // WebServer
-    $web = new Worker("http://0.0.0.0:{$webHosts[$ip]}");
+    $web = new Worker("http://0.0.0.0:{$port}");
     // WebServer进程数量
-    $web->count = isset($webCount[$ip]) ? $webCount[$ip] : 1;
+    $web->count = $count;
 
     define('WEBROOT', __DIR__ . DIRECTORY_SEPARATOR .  'Web');
 
