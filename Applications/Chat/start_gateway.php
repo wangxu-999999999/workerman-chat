@@ -29,6 +29,8 @@ if (array_key_exists($ip, $gatewayHosts)) {
 
     $port = $gatewayHosts[$ip]['port'];
     $count = isset($gatewayHosts[$ip]['count']) ? $gatewayHosts[$ip]['count'] : 1;
+    $startPort = $gatewayHosts[$ip]['start_port'];
+    $pingInterval = isset($gatewayHosts[$ip]['ping_interval']) ? $gatewayHosts[$ip]['ping_interval'] : 10;
 
     // gateway 进程
     $gateway = new Gateway("Websocket://0.0.0.0:{$port}");
@@ -40,9 +42,9 @@ if (array_key_exists($ip, $gatewayHosts)) {
     $gateway->lanIp = $ip;
     // 内部通讯起始端口。假如$gateway->count=4，起始端口为2300
     // 则一般会使用2300 2301 2302 2303 4个端口作为内部通讯端口
-    $gateway->startPort = 2300;
+    $gateway->startPort = $startPort;
     // 心跳间隔
-    $gateway->pingInterval = 10;
+    $gateway->pingInterval = $pingInterval;
     // 心跳数据
     $gateway->pingData = '{"type":"ping"}';
     // 服务注册地址

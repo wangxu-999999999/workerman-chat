@@ -14,10 +14,14 @@ $gatewayHosts = [
     '172.172.0.10' => [
         'port' => 7272,
         'count' => 4,
+        'start_port' => 2300,   // 内部通讯起始端口
+        'ping_interval' => 10,  // 心跳间隔，默认10
     ],
     '172.172.0.11' => [
         'port' => 7273,
         'count' => 4,
+        'start_port' => 2300,
+        'ping_interval' => 10,
     ],
 ];
 
