@@ -43,7 +43,7 @@ if (array_key_exists($ip, $webHosts)) {
         $path = $request->path();
         if ($path === '/') {
             $html = exec_php_file(WEBROOT.'/index.php');
-            $gatewayPort = $gatewayHosts[$ip];
+            $gatewayPort = $gatewayHosts[$ip]['port'];
             $html = str_replace('$gatewayPort', $gatewayPort, $html);
             $connection->send($html);
             return;
