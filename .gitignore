@@ -6,3 +6,4 @@ vendor
 composer.lock
 /Applications/Chat/config.php
 core.*
+/Applications/Chat/Log

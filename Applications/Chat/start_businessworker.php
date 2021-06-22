@@ -31,6 +31,7 @@ if (array_key_exists($ip, $workerHosts)) {
 
     // bussinessWorker 进程
     $worker = new BusinessWorker();
+    $worker::$stdoutFile = __DIR__ . "/Log/worker_{$ip}.log";
     // worker名称
     $worker->name = 'ChatBusinessWorker';
     // bussinessWorker进程数量
