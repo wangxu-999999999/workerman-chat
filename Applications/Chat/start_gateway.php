@@ -34,6 +34,12 @@ if (array_key_exists($ip, $gatewayHosts)) {
 
     // gateway 进程
     $gateway = new Gateway("Websocket://0.0.0.0:{$port}");
+    // 日志
+    $logPath = __DIR__ . "/Log/gateway_{$ip}.log";
+    if (isset($gatewayHosts[$ip]['log_path']) && $gatewayHosts[$ip]['log_path']) {
+        $logPath = $gatewayHosts[$ip]['log_path'];
+    }
+    $gateway::$stdoutFile = $logPath;
     // 设置名称，方便status时查看
     $gateway->name = 'ChatGateway';
     // 设置进程数，gateway进程数建议与cpu核数相同

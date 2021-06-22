@@ -31,9 +31,10 @@ if (array_key_exists($ip, $workerHosts)) {
 
     // bussinessWorker 进程
     $worker = new BusinessWorker();
+    // 日志
     $logPath = __DIR__ . "/Log/worker_{$ip}.log";
-    if (!file_exists($logPath)) {
-        touch($logPath);
+    if (isset($workerHosts[$ip]['log_path']) && $workerHosts[$ip]['log_path']) {
+        $logPath = $workerHosts[$ip]['log_path'];
     }
     $worker::$stdoutFile = $logPath;
     // worker名称

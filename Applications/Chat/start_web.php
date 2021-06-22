@@ -33,6 +33,12 @@ if (array_key_exists($ip, $webHosts)) {
 
     // WebServer
     $web = new Worker("http://0.0.0.0:{$port}");
+    // 日志
+    $logPath = __DIR__ . "/Log/web_{$ip}.log";
+    if (isset($webHosts[$ip]['log_path']) && $webHosts[$ip]['log_path']) {
+        $logPath = $webHosts[$ip]['log_path'];
+    }
+    $web::$stdoutFile = $logPath;
     // WebServer进程数量
     $web->count = $count;
 

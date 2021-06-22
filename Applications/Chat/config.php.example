@@ -3,10 +3,12 @@ $webHosts = [
     '172.172.0.10' => [
         'port' => 55151,    // 端口
         'count' => 2,       // 进程数量，默认1
+        'log_path' => '',   // 日志，默认在Log下
     ],
     '172.172.0.11' => [
         'port' => 55152,
         'count' => 2,
+        'log_path' => '',
     ],
 ];
 
@@ -16,12 +18,14 @@ $gatewayHosts = [
         'count' => 4,
         'start_port' => 2300,   // 内部通讯起始端口
         'ping_interval' => 10,  // 心跳间隔，默认10
+        'log_path' => '',
     ],
     '172.172.0.11' => [
         'port' => 7273,
         'count' => 4,
         'start_port' => 2300,
         'ping_interval' => 10,
+        'log_path' => '',
     ],
 ];
 
@@ -30,8 +34,10 @@ $registerHost = '172.172.0.12:1236';
 $workerHosts = [
     '172.172.0.13' => [
         'count' => 4,
+        'log_path' => '',
     ],
     '172.172.0.14' => [
         'count' => 4,
+        'log_path' => '',
     ],
 ];
