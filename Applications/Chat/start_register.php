@@ -18,18 +18,27 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 require_once 'config.php';
 
 /**
- * @var string $registerHost
+ * @var array $registerHost
  */
 
 $ip = gethostbyname(gethostname());
 
-list($configIp, $configPort) = explode(':', $registerHost);
+list($configIp, $configPort) = explode(':', $registerHost['host']);
 
 if ($ip == $configIp) {
 
+    $name = (isset($registerHost['name']) && $registerHost['name']) ? $registerHost['name'] : 'register';
+
     // register 服务必须是text协议
     $register = new Register("text://0.0.0.0:{$configPort}");
-
+    // 日志
+    $logPath = __DIR__ . "/Log/register_{$ip}.log";
+    if (isset($registerHost['log_path']) && $registerHost['log_path']) {
+        $logPath = $registerHost['log_path'];
+    }
+    $register::$stdoutFile = $logPath;
+    // 名称
+    $register->name = $name;
     // 如果不是在根目录启动，则运行runAll方法
     if(!defined('GLOBAL_START'))
     {

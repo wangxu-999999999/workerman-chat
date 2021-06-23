@@ -1,14 +1,16 @@
 <?php
 $webHosts = [
     '172.172.0.10' => [
-        'port' => 55151,    // 端口
-        'count' => 2,       // 进程数量，默认1
-        'log_path' => '',   // 日志，默认在Log下
+        'port' => 55151,        // 端口
+        'count' => 2,           // 进程数量，默认1
+        'log_path' => '',       // 日志，默认在Log下
+        'name' => 'web_1',      // 名称，默认web
     ],
     '172.172.0.11' => [
         'port' => 55152,
         'count' => 2,
         'log_path' => '',
+        'name' => 'web_2',
     ],
 ];
 
@@ -19,6 +21,7 @@ $gatewayHosts = [
         'start_port' => 2300,   // 内部通讯起始端口
         'ping_interval' => 10,  // 心跳间隔，默认10
         'log_path' => '',
+        'name' => 'gateway_1',  // 名称，默认gateway
     ],
     '172.172.0.11' => [
         'port' => 7273,
@@ -26,18 +29,25 @@ $gatewayHosts = [
         'start_port' => 2300,
         'ping_interval' => 10,
         'log_path' => '',
+        'name' => 'gateway_2',
     ],
 ];
 
-$registerHost = '172.172.0.12:1236';
+$registerHost = [
+    'host' => '172.172.0.12:1236',
+    'log_path' => '',
+    'name' => 'register',       // 名称，默认register
+];
 
 $workerHosts = [
     '172.172.0.13' => [
         'count' => 4,
         'log_path' => '',
+        'name' => 'worker_1',   // 名称，默认worker
     ],
     '172.172.0.14' => [
         'count' => 4,
         'log_path' => '',
+        'name' => 'worker_2',
     ],
 ];

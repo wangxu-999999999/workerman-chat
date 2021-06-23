@@ -20,7 +20,7 @@ require_once 'config.php';
 
 /**
  * @var array $workerHosts
- * @var string $registerHost
+ * @var array $registerHost
  */
 
 $ip = gethostbyname(gethostname());
@@ -28,6 +28,7 @@ $ip = gethostbyname(gethostname());
 if (array_key_exists($ip, $workerHosts)) {
 
     $count = isset($workerHosts[$ip]['count']) ? $workerHosts[$ip]['count'] : 1;
+    $name = (isset($workerHosts[$ip]['name']) && $workerHosts[$ip]['name']) ? $workerHosts[$ip]['name'] : 'worker';
 
     // bussinessWorker 进程
     $worker = new BusinessWorker();
@@ -38,11 +39,11 @@ if (array_key_exists($ip, $workerHosts)) {
     }
     $worker::$stdoutFile = $logPath;
     // worker名称
-    $worker->name = 'ChatBusinessWorker';
+    $worker->name = $name;
     // bussinessWorker进程数量
     $worker->count = $count;
     // 服务注册地址
-    $worker->registerAddress = $registerHost;
+    $worker->registerAddress = $registerHost['host'];
 
     // 如果不是在根目录启动，则运行runAll方法
     if(!defined('GLOBAL_START'))

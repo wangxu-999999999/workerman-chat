@@ -20,7 +20,7 @@ require_once 'config.php';
 
 /**
  * @var array $gatewayHosts
- * @var string $registerHost
+ * @var array $registerHost
  */
 
 $ip = gethostbyname(gethostname());
@@ -31,6 +31,7 @@ if (array_key_exists($ip, $gatewayHosts)) {
     $count = isset($gatewayHosts[$ip]['count']) ? $gatewayHosts[$ip]['count'] : 1;
     $startPort = $gatewayHosts[$ip]['start_port'];
     $pingInterval = isset($gatewayHosts[$ip]['ping_interval']) ? $gatewayHosts[$ip]['ping_interval'] : 10;
+    $name = (isset($gatewayHosts[$ip]['name']) && $gatewayHosts[$ip]['name']) ? $gatewayHosts[$ip]['name'] : 'gateway';
 
     // gateway 进程
     $gateway = new Gateway("Websocket://0.0.0.0:{$port}");
@@ -41,7 +42,7 @@ if (array_key_exists($ip, $gatewayHosts)) {
     }
     $gateway::$stdoutFile = $logPath;
     // 设置名称，方便status时查看
-    $gateway->name = 'ChatGateway';
+    $gateway->name = $name;
     // 设置进程数，gateway进程数建议与cpu核数相同
     $gateway->count = $count;
     // 分布式部署时请设置成内网ip（非127.0.0.1）
@@ -54,7 +55,7 @@ if (array_key_exists($ip, $gatewayHosts)) {
     // 心跳数据
     $gateway->pingData = '{"type":"ping"}';
     // 服务注册地址
-    $gateway->registerAddress = $registerHost;
+    $gateway->registerAddress = $registerHost['host'];
 
     /*
     // 当客户端连接上来时，设置连接的onWebSocketConnect，即在websocket握手时的回调

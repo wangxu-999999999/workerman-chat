@@ -30,6 +30,7 @@ if (array_key_exists($ip, $webHosts)) {
 
     $port = $webHosts[$ip]['port'];
     $count = isset($webHosts[$ip]['count']) ? $webHosts[$ip]['count'] : 1;
+    $name = (isset($webHosts[$ip]['name']) && $webHosts[$ip]['name']) ? $webHosts[$ip]['name'] : 'web';
 
     // WebServer
     $web = new Worker("http://0.0.0.0:{$port}");
@@ -39,6 +40,8 @@ if (array_key_exists($ip, $webHosts)) {
         $logPath = $webHosts[$ip]['log_path'];
     }
     $web::$stdoutFile = $logPath;
+    // 名称
+    $web->name = $name;
     // WebServer进程数量
     $web->count = $count;
 
